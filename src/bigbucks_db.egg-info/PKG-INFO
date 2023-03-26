@@ -1,0 +1,33 @@
+Metadata-Version: 2.1
+Name: bigbucks-db
+Version: 0.0.1
+Summary: This is for FINTECH 512 Group Project Backend Supabase Database
+Author-email: Jeff Duan <jeffduan19@gmail.com>
+Project-URL: Homepage, https://github.com/codemakerss/512_BigBucks_Proj_Pkg
+Project-URL: Bug Tracker, https://github.com/codemakerss/512_BigBucks_Proj_Pkg/issues
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# 512_BigBucks_Proj_Pkg Documentation
+
+## Preview
+
+This is for FINTECH 512 Group Project Backend Supabase Database.
+
+## Installation
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install `bigbucks_db`.
+
+```bash
+pip install bigbucks_db
+```
+
+## Update
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to upgrade `bigbucks_db`.
+
