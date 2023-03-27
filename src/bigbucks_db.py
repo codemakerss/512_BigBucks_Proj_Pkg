@@ -33,7 +33,7 @@ except ImportError as e:
 
 TABLE_NAME = ["Customer_Information", "Customer_Password", "Stock_Name", "Stock_Price_Daily_Data", "Transaction_Records"]
 
-# Customer_Information = ["customer_id", "first_name", "last_name", "phone_number", "email_address", "user_name"]
+# Customer_Information = ["customer_id", "first_name", "last_name", "phone_number", "email_address", "user_name", "password", "created_at"]
 # Customer_Password = ["customer_id", "created_at", "password"]
 # Stock_Name = ["stock_symbol", "stock_full_name", "exchange", "sector", "industry"]
 # Stock_Price_Daily_Data = ["stock_symbol", "date", "open", "high", "low", "close", "adjusted_close", "volume"]
@@ -71,15 +71,6 @@ class Table_Updates(object):
 
 		except:
 			print("Fail to get data from supabse datatbase. ")
-
-	# update password for customers
-	def update_customer_password(self, user_name : str, password : str):
-		customer_id = self.get_customer_id("Customer_Information", user_name)
-		customer_password = {}
-		customer_password["customer_id"] = customer_id
-		customer_password["password"] = password
-
-		return "Customer_Password", customer_password
 
 	# provides stock details 
 	def update_stock_name(self, stock_symbol : str, stock_full_name : str, exchange : str, sector : str, industry : str):
