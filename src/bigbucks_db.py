@@ -46,13 +46,14 @@ class Table_Updates(object):
 		self.keys = KEYS
 
 	# customers information data updated 
-	def update_customer_info(self, first_name : str, last_name : str, phone_number : int, email_address : str, user_name : str):
+	def update_customer_info(self, first_name : str, last_name : str, phone_number : int, email_address : str, user_name : str, password : str):
 		customer_info = {}
 		customer_info["first_name"] = first_name
 		customer_info["last_name"] = last_name
 		customer_info["phone_number"] = phone_number
 		customer_info["email_address"] = email_address
 		customer_info["user_name"] = user_name
+		customer_info["password"] = password
 
 		return "Customer_Information", customer_info
 
