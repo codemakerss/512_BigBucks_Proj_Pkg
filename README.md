@@ -12,24 +12,18 @@ We are using Supabase PostgresSQL database for our project. For more information
 
 ### 1. Customer_Information
 
-| Column Name   |  Type  |    Keys     |
-| :------------ | :----: | :---------: |
-| customer_id   | `int`  | Primary Key |
-| first_name    | `text` |     `-`     |
-| last_name     | `text` |     `-`     |
-| phone_number  | `int`  |     `-`     |
-| email_address | `text` |     `-`     |
-| user_name     | `text` |     `-`     |
+| Column Name   |     Type      |    Keys     |
+| :------------ | :-----------: | :---------: |
+| customer_id   |     `int`     | Primary Key |
+| first_name    |    `text`     |     `-`     |
+| last_name     |    `text`     |     `-`     |
+| phone_number  |     `int`     |     `-`     |
+| email_address |    `text`     |     `-`     |
+| user_name     |    `text`     |     `-`     |
+| password      |    `text`     |     `-`     |
+| created_at    | `timestamptz` |     `-`     |
 
-### 2. Customer_Password
-
-| Column Name |     Type      |                             Keys                             |
-| ----------- | :-----------: | :----------------------------------------------------------: |
-| customer_id |     `int`     | Primary Key & Foreign Key to `Customer_Information.customer_id` |
-| created_at  | `timestamptz` |                             `-`                              |
-| password    |    `text`     |                             `-`                              |
-
-### 3. Stock_Information
+### 2. Stock_Information
 
 | Column Name     |  Type  |    Keys     |
 | :-------------- | :----: | :---------: |
@@ -38,7 +32,7 @@ We are using Supabase PostgresSQL database for our project. For more information
 | exchange        | `text` |     `-`     |
 | sector          | `text` |     `-`     |
 | industry        | `text` |     `-`     |
-### 4.  Stock_Price_Daily_Data
+### 3.  Stock_Price_Daily_Data
 
 | Column Name    |  Type   |    Keys     |
 | :------------- | :-----: | :---------: |
@@ -51,7 +45,7 @@ We are using Supabase PostgresSQL database for our project. For more information
 | adjusted_close | `float` |     `-`     |
 | volume         |  `int`  |     `-`     |
 
-### 5. Transaction_Records
+### 4. Transaction_Records
 
 | Column Name          |    Type     |                       Keys                        |
 | :------------------- | :---------: | :-----------------------------------------------: |
@@ -89,20 +83,8 @@ db = Table_Updates(SUPABASE_URL, KEYS)
 ```python
 # Example Code
 # below are information needs to be included
-# first_name : str, last_name : str, phone_number : int, email_address : str, user_name : str
-tmp = db.update_stock_name("Sam", "Jay", 2892892893, "duke@email", "Jay_invest")
-# tmp[0] is the table name, tmp[1] is the data needs to be updated
-db.supabase_insert_function(tmp[0], tmp[1]) 
-print(tmp)
-```
-
-- Update  Customer_Password
-
-```python
-# Example Code
-# below are information needs to be included
-# user_name : str, password : str
-tmp = db.update_customer_password("Jay_invest", "duke512")
+# first_name : str, last_name : str, phone_number : int, email_address : str, user_name : str, password : str
+tmp = db.update_stock_name("Sam", "Jay", 2892892893, "duke@email", "Jay_invest", "duke512")
 # tmp[0] is the table name, tmp[1] is the data needs to be updated
 db.supabase_insert_function(tmp[0], tmp[1]) 
 print(tmp)
