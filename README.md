@@ -62,7 +62,7 @@ We are using Supabase PostgresSQL database for our project. For more information
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install `bigbucks_db`.
 
 ```bash
-pip install bigbucks_db
+pip install bigbucks-db
 ```
 
 ## Functions
