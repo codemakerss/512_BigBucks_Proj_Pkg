@@ -36,7 +36,7 @@ We are using Supabase PostgresSQL database for our project. For more information
 
 | Column Name    |  Type   |    Keys     |
 | :------------- | :-----: | :---------: |
-| stock_symbol   |  `int`  | Primary Key |
+| stock_symbol   | `text`  | Primary Key |
 | date           | `date`  |     `-`     |
 | open           | `float` |     `-`     |
 | high           | `float` |     `-`     |
@@ -84,7 +84,7 @@ db = Table_Updates(SUPABASE_URL, KEYS)
 # Example Code
 # below are information needs to be included
 # first_name : str, last_name : str, phone_number : int, email_address : str, user_name : str, password : str
-tmp = db.update_stock_name("Sam", "Jay", 2892892893, "duke@email", "Jay_invest", "duke512")
+tmp = db.update_customer_info("Sam", "Jay", 2892892893, "duke@email", "Jay_invest", "duke512")
 # tmp[0] is the table name, tmp[1] is the data needs to be updated
 db.supabase_insert_function(tmp[0], tmp[1]) 
 print(tmp)
