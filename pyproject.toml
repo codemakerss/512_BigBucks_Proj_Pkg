@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bigbucks_db"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
   { name="Jeff Duan", email="jeffduan19@gmail.com" },
 ]
