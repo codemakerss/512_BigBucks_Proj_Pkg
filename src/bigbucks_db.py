@@ -31,6 +31,18 @@ except ImportError as e:
     print("Package <time> needed to be installed before getting data ! ")
     raise e 
 
+try:
+    import yfinance as yf
+except ImportError as e:
+    print("Package <yfinance> needed to be installed before getting data ! ")
+    raise e
+
+try:
+    import pandas as pd
+except ImportError as e:
+    print("Package <pandas> needed to be installed before getting data ! ")
+    raise e
+
 TABLE_NAME = ["Customer_Information", "Customer_Password", "Stock_Name", "Stock_Price_Daily_Data", "Transaction_Records"]
 
 # Customer_Information = ["customer_id", "first_name", "last_name", "phone_number", "email_address", "user_name", "password", "created_at"]
@@ -54,6 +66,7 @@ class Table_Updates(object):
 		customer_info["email_address"] = email_address
 		customer_info["user_name"] = user_name
 		customer_info["password"] = password
+		customer_info["account_balance"] = 1000000.00
 
 		return "Customer_Information", customer_info
 
@@ -125,8 +138,36 @@ class Table_Updates(object):
 		except:
 			print("Fail to implement supabse insert function")
 
+# buy and sell stocks at realtime 
+class Buy_And_Sell(object):
+	def __init__(self, STOCK_API_KEYS):
+		self.keys = STOCK_API_KEYS
 
+	def get_realtime_stock_price(self, stock_symbol : str):
+		# real time data get from 1 day period and interval 1 minute
+		print(stock_symbol)
+		data = yf.download(tickers= stock_symbol, period='1d', interval='1m')
 
+		return data.iloc[-1]["Adj Close"]
+	# https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=1min&apikey=demo
+	def realtime_price_bkp(self, stock_symbol : str):
+		# example symbol : "AAPL" or "IBM"
+		base_url = 'https://www.alphavantage.co/query?'
+		params = {"function": "TIME_SERIES_INTRADAY", "symbol": stock_symbol, "interval": "1min", "apikey": self.keys}
+		response = requests.get(base_url, params=params)
+		data = response.json() # dict
+
+		count_one = 0
+		print(data)
+		stock_price = 0
+		for k,v in data["Time Series (1min)"].items():
+			if (count_one == 1):
+				break
+			stock_price = v["4. close"]
+
+			count_one = count_one + 1
+
+		return stock_price
 
 
 
