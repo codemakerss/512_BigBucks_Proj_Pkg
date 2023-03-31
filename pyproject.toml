@@ -3,14 +3,15 @@ requires = ["setuptools>=61.0",
     "wheel",
     "pandas",
     "requests",
-    "pendulum"
+    "pendulum",
+    "yfinance"
 ]
 build-backend = "setuptools.build_meta"
 
 
 [project]
 name = "bigbucks_db"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
   { name="Jeff Duan", email="jeffduan19@gmail.com" },
 ]
