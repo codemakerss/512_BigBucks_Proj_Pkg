@@ -67,6 +67,8 @@ pip install bigbucks-db
 
 ## Functions
 
+### 1. Database Update
+
 - Set up class objects here
 
 ```python
@@ -125,6 +127,26 @@ tmp = db.update_transaction_records("Jay_invest", "AAPL", 123, 125.19)
 db.supabase_insert_function(tmp[0], tmp[1]) 
 print(tmp)
 ```
+
+### 2. Realtime Stock Data - Buy and Sell
+
+```python
+from bigbucks_db import *
+
+# Enter stock keys here
+STOCK_API_KEYS = ""
+objs = Buy_And_Sell(STOCK_API_KEYS)
+
+# realtime stock data within 1 mins interval
+stock_symbol = ""
+price = objs.get_realtime_stock_price(stock_symbol)
+print(price)
+# or you could use backup function to get price in case above function fail
+price2 = objs.realtime_price_bkp(stock_symbol)
+print(price2)
+```
+
+
 
 ## Other
 
