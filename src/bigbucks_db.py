@@ -124,21 +124,27 @@ class Table_Updates(object):
 
 		# amount buying stocks spent
 		stock_amount_spent = num_shares * stock_price_realtime
-		
-		# get current balance from customer info
-		api_url = self.url + "/rest/v1/" + "Customer_Information" + "?customer_id=eq." + str(customer_id)
-		parameters =  {"apikey":self.keys}
-		customer_data = requests.get(url = api_url, params = parameters)
-		current_balance = customer_data.json()[0]['account_balance']
-
-		# update balance
-		update_balance = current_balance - stock_amount_spent
-
-		# update the customer account balance 
-		data_to_insert = {"account_balance" : update_balance}
-		response = requests.patch(url = api_url, params = parameters, json = data_to_insert)
+		self.update_customer_balance(customer_id, stock_amount_spent)
 
 		return "Transaction_Records", transactions
+
+	def update_customer_balance(self, customer_id : int, stock_amount_spent : float):
+		try:
+			# get current balance from customer info
+			api_url = self.url + "/rest/v1/" + "Customer_Information" + "?customer_id=eq." + str(customer_id)
+			parameters =  {"apikey":self.keys}
+			customer_data = requests.get(url = api_url, params = parameters)
+			current_balance = customer_data.json()[0]['account_balance']
+
+			# update balance
+			update_balance = current_balance - stock_amount_spent
+
+			# update the customer account balance 
+			data_to_insert = {"account_balance" : update_balance}
+			response = requests.patch(url = api_url, params = parameters, json = data_to_insert)
+		except:
+			print("Fail to update customer balance")
+
 
 	def supabase_insert_function(self, table_name : str, data_to_insert : dict)->str:
 		"""
@@ -192,4 +198,5 @@ class Table_View(object):
 		self.keys = KEYS
 
 
+	pass
 
