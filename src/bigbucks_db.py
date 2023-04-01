@@ -53,9 +53,10 @@ TABLE_NAME = ["Customer_Information", "Customer_Password", "Stock_Name", "Stock_
 
 
 class Table_Updates(object):
-	def __init__(self, SUPABASE_URL, KEYS):
+	def __init__(self, SUPABASE_URL, KEYS, STOCK_API_KEYS):
 		self.url = SUPABASE_URL
 		self.keys = KEYS
+		self.stock_keys = STOCK_API_KEYS
 
 	# customers information data updated 
 	def update_customer_info(self, first_name : str, last_name : str, phone_number : int, email_address : str, user_name : str, password : str):
@@ -127,6 +128,11 @@ class Table_Updates(object):
 		# amount buying stocks spent
 		stock_amount_spent = num_shares * stock_price_realtime
 		self.update_customer_balance(customer_id, stock_amount_spent, condition)
+
+		# update stock symbol information
+		objs = Stock_Data(self.url, self.keys, self.stock_keys)
+		stock_info = objs.get_stock_information(stock_symbol)
+		objs.update_stock_info(stock_info)
 
 		return "Transaction_Records", transactions
 
@@ -211,8 +217,14 @@ class Stock_Data(object):
 		data = response.json() # dict
 
 		# "stock_symbol", "stock_full_name", "exchange", "sector", "industry"	
+		db = Table_Updates(self.url, self.db_keys, self.stock_keys)
+		stock_input = db.update_stock_details(stock_symbol, data['Name'], data['Exchange'], data['Sector'], data['Industry'])
+		return stock_input
 
-		print(data)
+	# update stock information goes here
+	def update_stock_info(self, data_to_insert : dict):
+		db = Table_Updates(self.url, self.db_keys, self.stock_keys)
+		db.supabase_insert_function(data_to_insert[0], data_to_insert[1])
 
 
 # get / view data from database
