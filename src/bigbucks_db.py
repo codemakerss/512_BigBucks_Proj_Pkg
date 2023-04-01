@@ -120,7 +120,23 @@ class Table_Updates(object):
 		transactions["customer_id"] = customer_id
 		transactions["stock_symbol"] = stock_symbol
 		transactions["num_shares"] = num_shares
-		transactions["stock_price_realtime"] = stock_price_realtime
+		transactions["stock_price_realtime"] = float(stock_price_realtime)
+
+		# amount buying stocks spent
+		stock_amount_spent = num_shares * stock_price_realtime
+		
+		# get current balance from customer info
+		api_url = self.url + "/rest/v1/" + "Customer_Information" + "?customer_id=eq." + str(customer_id)
+		parameters =  {"apikey":self.keys}
+		customer_data = requests.get(url = api_url, params = parameters)
+		current_balance = customer_data.json()[0]['account_balance']
+
+		# update balance
+		update_balance = current_balance - stock_amount_spent
+
+		# update the customer account balance 
+		data_to_insert = {"account_balance" : update_balance}
+		response = requests.patch(url = api_url, params = parameters, json = data_to_insert)
 
 		return "Transaction_Records", transactions
 
@@ -148,7 +164,7 @@ class Buy_And_Sell(object):
 		print(stock_symbol)
 		data = yf.download(tickers= stock_symbol, period='1d', interval='1m')
 
-		return data.iloc[-1]["Adj Close"]
+		return float(data.iloc[-1]["Adj Close"])
 	# https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=1min&apikey=demo
 	def realtime_price_bkp(self, stock_symbol : str):
 		# example symbol : "AAPL" or "IBM"
@@ -169,7 +185,11 @@ class Buy_And_Sell(object):
 
 		return stock_price
 
-
+# get / view data from database
+class Table_View(object):
+	def __init__(self, SUPABASE_URL, KEYS):
+		self.url = SUPABASE_URL
+		self.keys = KEYS
 
 
 
