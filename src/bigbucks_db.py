@@ -43,6 +43,8 @@ except ImportError as e:
     print("Package <pandas> needed to be installed before getting data ! ")
     raise e
 
+import time
+
 TABLE_NAME = ["Customer_Information", "Customer_Password", "Stock_Name", "Stock_Price_Daily_Data", "Transaction_Records"]
 
 # Customer_Information = ["customer_id", "first_name", "last_name", "phone_number", "email_address", "user_name", "password", "created_at", "account_balance"]
@@ -209,7 +211,7 @@ class Stock_Data(object):
 		self.db_keys = KEYS		
 		self.stock_keys = STOCK_API_KEYS
 
-	# check and update stock symbol 5 years price data here
+	# get stock information from API
 	def get_stock_information(self, stock_symbol : str):
 		base_url = 'https://www.alphavantage.co/query?'
 		params = {"function": "OVERVIEW", "symbol": stock_symbol, "apikey": self.stock_keys}
@@ -226,6 +228,81 @@ class Stock_Data(object):
 		db = Table_Updates(self.url, self.db_keys, self.stock_keys)
 		db.supabase_insert_function(data_to_insert[0], data_to_insert[1])
 
+	# check whether symbol already exists
+	def check_symbol_exist(self, stock_symbol : str):
+		api_url = self.url + "/rest/v1/" + "Stock_Price_Daily_Data?stock_symbol=eq." + stock_symbol
+
+		parameters =  {"apikey":self.db_keys}
+
+		response = requests.get(url = api_url, params = parameters)
+		data = response.json()	
+
+		if (len(data) > 0):
+			return True
+		else:
+			return False
+
+	# get all stock symbols from stock information table
+	def get_all_symbols(self):
+		api_url = self.url + "/rest/v1/" + "Stock_Information"
+
+		parameters =  {"apikey":self.db_keys}
+
+		response = requests.get(url = api_url, params = parameters)
+		data = response.json()
+
+		symbol_names = []
+
+		for info in data:
+			if (self.check_symbol_exist(info['stock_symbol']) == False):
+				symbol_names.append(info['stock_symbol'])
+
+		return symbol_names
+
+	# check and update stock symbol 5 years price data here
+	def store_stock_price_data(self):
+		symbol_list = self.get_all_symbols()
+
+		all_data = {}
+		for stock_symbol in symbol_list:
+			base_url = 'https://www.alphavantage.co/query?'
+			params = {"function": "TIME_SERIES_DAILY_ADJUSTED", "symbol": stock_symbol, "outputsize" : "full","apikey": self.stock_keys}
+			
+			response = requests.get(base_url, params=params)
+			data = response.json() # dict
+			# store all data 
+			all_data[stock_symbol] = data['Time Series (Daily)']
+
+		return all_data
+
+	# update all symbols price
+	def update_all_stock_price(self):
+		try:
+			all_symbol_price = self.store_stock_price_data()
+
+			if all_symbol_price:
+				# get date now
+				now = pendulum.now()
+				five_years_ago = now.subtract(years=5).date()
+				#print('2018-05-01' >= str(five_years_ago))
+
+				# call Table_Updates object
+				db = Table_Updates(self.url, self.db_keys, self.stock_keys)
+
+				ct = 0
+				# loop through each stock
+				for stock, price in all_symbol_price.items():
+					stock_symbol = stock
+
+					for date, p in price.items():
+						if (str(date) >= str(five_years_ago)):
+							data_to_insert = db.update_stock_daily_price(stock_symbol, date, p['1. open'], p['2. high'], p['3. low'], p['4. close'], p['5. adjusted close'], p['6. volume'])
+							db.supabase_insert_function(data_to_insert[0], data_to_insert[1])
+			else:
+				print("stock symbol already exists")
+		
+		except:
+			print("Fail to update all stock price")
 
 # get / view data from database
 class Table_View(object):
