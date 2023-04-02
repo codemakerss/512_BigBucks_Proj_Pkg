@@ -174,7 +174,7 @@ price2 = objs.realtime_price_bkp(stock_symbol)
 print(price2)
 ```
 
-### 3. Update 5 years stock price data 
+### 3. Update 5 Years Stock Price Data 
 
 ​	Note : only when customers buy stocks to implement this function since it will only go though the stock_information table
 
@@ -192,6 +192,47 @@ stock = Stock_Data(SUPABASE_URL, KEYS, STOCK_API_KEYS)
 data = stock.update_all_stock_price()
 ```
 
+### 4. View Table Data
+
+- Set up object
+
+```python
+# Example Code
+# below are information needs to be included
+from bigbucks_db import *
+# Enter database url and keys here
+SUPABASE_URL = ""
+KEYS = ""
+objs = Table_View(SUPABASE_URL, KEYS)
+```
+
+- View all data without querying
+
+```python
+# table_name : str 
+# select from "Customer_Information", "Stock_Information", "Stock_Price_Daily_Data", "Transaction_Records"
+table_name = "Transaction_Records"
+data = objs.view_table_data(table_name)
+print(data)
+```
+
+​       Example results : 
+```bash
+[{'transaction_id': 7, 'customer_id': 6, 'transaction_date': '2023-04-01T20:35:29.239042', 'stock_symbol': 'AAPL', 'num_shares': 100, 'stock_price_realtime': 164.839996337891, 'condition': 'buy'}, {'transaction_id': 10, 'customer_id': 6, 'transaction_date': '2023-04-01T20:37:52.832943', 'stock_symbol': 'AAPL', 'num_shares': 100, 'stock_price_realtime': 164.839996337891, 'condition': 'sell'}]
+```
+
+- View stock price with querying
+```python
+# symbol_name : str
+symbol_name = "AAPL"
+data = objs.view_symbol_price_data(symbol_name)
+print(data)
+```
+
+​       Example results : 
+```bash
+[{'stock_symbol': 'AAPL', 'date': '2018-04-10', 'open': 173, 'high': 174, 'low': 171.53, 'close': 173.25, 'adjusted_close': 41.2348154406459, 'volume': 28614241, 'ids': 1254}, {'stock_symbol': 'AAPL', 'date': '2018-04-09', 'open': 169.88, 'high': 173.09, 'low': 169.85, 'close': 170.05, 'adjusted_close': 40.4731911439067, 'volume': 29017718, 'ids': 1255}]
+```
 
 
 
