@@ -310,6 +310,38 @@ class Table_View(object):
 		self.url = SUPABASE_URL
 		self.keys = KEYS
 
+	# general way 
+	def view_table_data(self, table_name : str):
+		api_url = self.url + "/rest/v1/" + table_name
+		parameters =  {"apikey":self.keys}
+		response = requests.get(url = api_url, params = parameters)
+		data = response.json()
 
-	pass
+		return data
+
+	# get all symbol 5 years price data
+	def view_symbol_price_data(self, symbol_name : str):
+		api_url = self.url + "/rest/v1/" + "Stock_Price_Daily_Data" + "?stock_symbol=eq." + symbol_name
+		parameters =  {"apikey":self.keys}
+		response = requests.get(url = api_url, params = parameters)
+		data = response.json()
+
+		return data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
