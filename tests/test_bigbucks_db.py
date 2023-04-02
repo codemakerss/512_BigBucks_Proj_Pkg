@@ -5,8 +5,8 @@ import bigbucks_db as bk
 
 STOCK_API_KEYS = "9Q91BWGMOE13WOR3"
 # Enter database url and keys here
-SUPABASE_URL = 
-KEYS = 
+SUPABASE_URL = ""
+KEYS = ""
 # db = bk.Table_Updates(SUPABASE_URL, KEYS, STOCK_API_KEYS)
 
 # objs = bk.Buy_And_Sell("9Q91BWGMOE13WOR3")
