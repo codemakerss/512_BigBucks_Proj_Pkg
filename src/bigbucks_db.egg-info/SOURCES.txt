@@ -7,3 +7,4 @@ src/bigbucks_db.egg-info/PKG-INFO
 src/bigbucks_db.egg-info/SOURCES.txt
 src/bigbucks_db.egg-info/dependency_links.txt
 src/bigbucks_db.egg-info/top_level.txt
+tests/test_bigbucks_db.py
