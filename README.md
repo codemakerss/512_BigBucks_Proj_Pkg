@@ -67,6 +67,8 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install `bigbuc
 pip install bigbucks-db
 ```
 
+Note : If you want to know more information about this package, please go visit [official website](https://pypi.org/project/bigbucks-db/).
+
 ## Functions
 
 ### 1. Database Update
