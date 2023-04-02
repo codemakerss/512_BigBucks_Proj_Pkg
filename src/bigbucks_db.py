@@ -43,7 +43,7 @@ except ImportError as e:
     print("Package <pandas> needed to be installed before getting data ! ")
     raise e
 
-import time
+#import time
 
 TABLE_NAME = ["Customer_Information", "Customer_Password", "Stock_Name", "Stock_Price_Daily_Data", "Transaction_Records"]
 
