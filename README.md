@@ -217,7 +217,7 @@ print(data)
 ```
 
 ​       Example results : 
-```apl
+```python
 [{'transaction_id': 7, 'customer_id': 6, 'transaction_date': '2023-04-01T20:35:29.239042', 'stock_symbol': 'AAPL', 'num_shares': 100, 'stock_price_realtime': 164.839996337891, 'condition': 'buy'}, {'transaction_id': 10, 'customer_id': 6, 'transaction_date': '2023-04-01T20:37:52.832943', 'stock_symbol': 'AAPL', 'num_shares': 100, 'stock_price_realtime': 164.839996337891, 'condition': 'sell'}]
 ```
 
@@ -230,7 +230,7 @@ print(data)
 ```
 
 ​       Example results : 
-```apl
+```python
 [{'stock_symbol': 'AAPL', 'date': '2018-04-10', 'open': 173, 'high': 174, 'low': 171.53, 'close': 173.25, 'adjusted_close': 41.2348154406459, 'volume': 28614241, 'ids': 1254}, {'stock_symbol': 'AAPL', 'date': '2018-04-09', 'open': 169.88, 'high': 173.09, 'low': 169.85, 'close': 170.05, 'adjusted_close': 40.4731911439067, 'volume': 29017718, 'ids': 1255}]
 ```
 
