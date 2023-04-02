@@ -37,7 +37,8 @@ We are using Supabase PostgresSQL database for our project. For more information
 
 | Column Name    |  Type   |    Keys     |
 | :------------- | :-----: | :---------: |
-| stock_symbol   | `text`  | Primary Key |
+| ids   | `int` | Primary Key |
+| stock_symbol   | `text`  | `-` |
 | date           | `date`  |     `-`     |
 | open           | `float` |     `-`     |
 | high           | `float` |     `-`     |
