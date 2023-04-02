@@ -247,5 +247,5 @@ print(data)
 
 ## Update
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to upgrade `bigbucks_db`.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to upgrade `bigbucks-db`.
 
