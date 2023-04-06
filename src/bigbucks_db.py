@@ -438,6 +438,12 @@ class SP500(object):
 		except:
 			print("Fail to implement supabse insert function")
 
+	# realtime sp500
+	def realtime_sp500(self):
+		data = yf.download(tickers= "^GSPC", period='1d')
+
+		return float(data.iloc[-1]["Adj Close"])
+
 
 
 
