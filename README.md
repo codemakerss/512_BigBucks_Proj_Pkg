@@ -58,6 +58,12 @@ We are using Supabase PostgresSQL database for our project. For more information
 | stock_symbol         |  `varchar`  |                        `-`                        |
 | num_shares           |    `int`    |                        `-`                        |
 | stock_price_realtime |   `float`   |                        `-`                        |
+### 5.  SP500_Index
+
+| Column Name    |  Type   |    Keys     |
+| :------------- | :-----: | :---------: |
+| date | `date` | Primary Key |
+| close | `float` | `-` |
 
 ## Installation
 
@@ -236,7 +242,21 @@ print(data)
 [{'stock_symbol': 'AAPL', 'date': '2018-04-10', 'open': 173, 'high': 174, 'low': 171.53, 'close': 173.25, 'adjusted_close': 41.2348154406459, 'volume': 28614241, 'ids': 1254}, {'stock_symbol': 'AAPL', 'date': '2018-04-09', 'open': 169.88, 'high': 173.09, 'low': 169.85, 'close': 170.05, 'adjusted_close': 40.4731911439067, 'volume': 29017718, 'ids': 1255}]
 ```
 
+### 5. Update 5 Years SP500 
 
+	Note : this is only for demostration and no need to run this code - all data has already updated
+
+```python
+# Example Code
+# below are information needs to be included
+from bigbucks_db import *
+# Enter database url and keys here
+SUPABASE_URL = ""
+KEYS = ""
+STOCK_API_KEYS = ""
+sp500 = SP500(SUPABASE_URL, KEYS, STOCK_API_KEYS)
+updates = sp500.update_sp_500()
+```
 
 ## Other
 
