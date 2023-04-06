@@ -180,7 +180,7 @@ class Buy_And_Sell(object):
 
 	def get_realtime_stock_price(self, stock_symbol : str):
 		# real time data get from 1 day period and interval 1 minute
-		print(stock_symbol)
+		# print(stock_symbol)
 		data = yf.download(tickers= stock_symbol, period='1d', interval='1m')
 
 		return float(data.iloc[-1]["Adj Close"])
@@ -328,15 +328,115 @@ class Table_View(object):
 
 		return data
 
+	# get the customer id from Customer_Information
+	def get_customer_id(self, user_name : str):
+		# by unique name of username and customer id 
+		try:
+			api_url = self.url + "/rest/v1/Customer_Information" + "?user_name=eq." + user_name
+
+			parameters =  {"apikey":self.keys}
+
+			response = requests.get(url =api_url, params = parameters)
+			data = json.loads(response.text)
+
+			return data[0]["customer_id"]
+
+		except:
+			print("Fail to get data from supabse datatbase. ")
+
+	# view customer's portfolio information
+	def view_customer_portfolio(self, user_name : str):
+		user_id = self.get_customer_id(user_name)
+		api_url = self.url + "/rest/v1/Transaction_Records" + "?customer_id=eq." + str(user_id)
+
+		parameters =  {"apikey":self.keys}
+
+		response = requests.get(url = api_url, params = parameters)
+		data = response.json()	
+
+		# create a set of stocks customer hold
+		unique_stock_symbols = {}
+
+		# only symbols list 
+		symbol_lists = set()
+
+		# default lists for keys symbols 
+		for info in data:
+			symbol = info['stock_symbol']
+			unique_stock_symbols[symbol] = []
+
+			# symbol list goes here
+			symbol_lists.add(symbol)
 
 
+		for stocks in data:
+			symbol = stocks['stock_symbol']
+			# store each records to their related stock symbol
+			unique_stock_symbols[symbol].append((stocks["condition"], stocks["num_shares"], stocks["stock_price_realtime"]))
+
+		# check if stock the customer still holds 
+		# if the number of shares become 0, then it indicates the stock will not be held anymore
+		# share_number_check = 0
+
+		# for stock_symbol in symbol_list:
+		# 	for records in unique_stock_symbols[stock_symbol]:
+		# 		if (records[0] == "buy"):
+
+		# 		else if (records[0] == "sell")
 
 
+		print(symbol_lists)
+		return unique_stock_symbols
 
 
+class SP500(object):
+	def __init__(self, SUPABASE_URL, KEYS, STOCK_API_KEYS):
+		self.url = SUPABASE_URL
+		self.keys = KEYS
+		self.stock_keys = STOCK_API_KEYS
 
 
+	def sp500_data_dict(self):
+		data = yf.download(tickers= "^GSPC", period='5y')
 
+		dict_sp500 = {}
+
+		#dict_sp500[]
+
+		total_data = len(data)
+		num_row = 0
+
+		while (num_row < 1259):
+			date_time = str(data.index[num_row]).split()[0]
+
+			index_ = data.iloc[num_row]["Adj Close"]
+
+			dict_sp500[date_time] = float(index_)
+
+			num_row = num_row + 1
+
+
+		return dict_sp500
+
+	
+	def update_sp_500(self):
+		try:
+			# route to table
+			api_url = self.url + "/rest/v1/" + "SP500_Index"
+
+			parameters =  {"apikey":self.keys}
+
+			data_to_insert = self.sp500_data_dict()
+			for k,v in data_to_insert.items():
+				tmp_data = {}
+				tmp_data["date"] = k
+				tmp_data["close"] = v
+				# print(tmp_data)
+				time.sleep(0.25)
+				response = requests.post(url = api_url, params = parameters, json = tmp_data)
+	
+		except:
+			print("Fail to implement supabse insert function")
 
 
 
