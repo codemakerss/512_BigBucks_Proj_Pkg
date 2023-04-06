@@ -242,9 +242,57 @@ print(data)
 [{'stock_symbol': 'AAPL', 'date': '2018-04-10', 'open': 173, 'high': 174, 'low': 171.53, 'close': 173.25, 'adjusted_close': 41.2348154406459, 'volume': 28614241, 'ids': 1254}, {'stock_symbol': 'AAPL', 'date': '2018-04-09', 'open': 169.88, 'high': 173.09, 'low': 169.85, 'close': 170.05, 'adjusted_close': 40.4731911439067, 'volume': 29017718, 'ids': 1255}]
 ```
 
-### 5. Update 5 Years SP500 
+### 5. View Customers' Transaction Records & Current Portfolio
 
-	Note : this is only for demostration and no need to run this code - all data has already updated
+Note : those are back up functions
+
+- View customers' transaction records
+
+```python
+# Example Code
+# below are information needs to be included
+from bigbucks_db import *
+# Enter database url and keys here
+SUPABASE_URL = ""
+KEYS = ""
+
+objs = Table_View(SUPABASE_URL, KEYS)
+# user_name : str
+user_name = "Jeffd"
+results = objs.view_customer_transaction(user_name)
+print(results)
+```
+
+​        Example results : 
+
+```bash
+{'AAPL': [('buy', 100, 164.839996337891), ('sell', 100, 164.839996337891)], 'IBM': [('sell', 100, 164.839996337891), ('buy', 100, 164.839996337891), ('buy', 100, 131.070007324219)]}
+```
+- View customers' current portfolio
+
+```python
+# Example Code
+# below are information needs to be included
+from bigbucks_db import *
+# Enter database url and keys here
+SUPABASE_URL = ""
+KEYS = ""
+
+objs = Table_View(SUPABASE_URL, KEYS)
+# user_name : str
+user_name = "Jeffd"
+results = objs.view_customer_portfolio(user_name)
+print(results)
+```
+
+​        Example results : 
+
+```bash
+{'IBM': {'shares': 100}}
+```
+### 6. Update 5 Years SP500 
+
+Note : this is only for demostration and no need to run this code - all data has already updated
 
 ```python
 # Example Code
@@ -256,6 +304,10 @@ KEYS = ""
 STOCK_API_KEYS = ""
 sp500 = SP500(SUPABASE_URL, KEYS, STOCK_API_KEYS)
 updates = sp500.update_sp_500()
+
+# you can also get realtime SP500 data
+data = realtime_sp500()
+print(data)
 ```
 
 ## Other
