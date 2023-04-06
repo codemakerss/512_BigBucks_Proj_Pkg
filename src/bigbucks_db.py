@@ -344,8 +344,8 @@ class Table_View(object):
 		except:
 			print("Fail to get data from supabse datatbase. ")
 
-	# view customer's portfolio information
-	def view_customer_portfolio(self, user_name : str):
+	# view customer's transaction records
+	def view_customer_transaction(self, user_name : str):
 		user_id = self.get_customer_id(user_name)
 		api_url = self.url + "/rest/v1/Transaction_Records" + "?customer_id=eq." + str(user_id)
 
@@ -374,19 +374,35 @@ class Table_View(object):
 			# store each records to their related stock symbol
 			unique_stock_symbols[symbol].append((stocks["condition"], stocks["num_shares"], stocks["stock_price_realtime"]))
 
+
+		#print(symbol_lists)
+		return unique_stock_symbols
+
+	# view customer's portfolio information
+	def view_customer_portfolio(self, user_name : str):
 		# check if stock the customer still holds 
 		# if the number of shares become 0, then it indicates the stock will not be held anymore
 		# share_number_check = 0
 
-		# for stock_symbol in symbol_list:
-		# 	for records in unique_stock_symbols[stock_symbol]:
-		# 		if (records[0] == "buy"):
+		records = self.view_customer_transaction(user_name)
 
-		# 		else if (records[0] == "sell")
+		# store user current symbols 
+		curr_portfolio = {}
+		for k,v in records.items():
+			shares_ = 0
+			for r in v:
+				if (r[0] == "buy"):
+					shares_ = shares_ + r[1]
+				elif (r[0] == "sell"):
+					shares_ = shares_ - r[1]
 
+			# check shares = 0
+			shares = {}
+			if (shares_ != 0):
+				shares["shares"] = shares_
+				curr_portfolio[k] = shares
 
-		print(symbol_lists)
-		return unique_stock_symbols
+		return curr_portfolio
 
 
 class SP500(object):
