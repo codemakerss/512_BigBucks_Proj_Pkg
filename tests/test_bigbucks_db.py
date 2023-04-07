@@ -5,8 +5,10 @@ import bigbucks_db as bk
 
 STOCK_API_KEYS = "9Q91BWGMOE13WOR3"
 # Enter database url and keys here
-SUPABASE_URL = ""
-KEYS = ""
+# SUPABASE_URL = ""
+# KEYS = ""
+SUPABASE_URL = 'https://lhjpufbcymwhprgzfbwt.supabase.co'
+KEYS = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxoanB1ZmJjeW13aHByZ3pmYnd0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY3OTYwNjcwMywiZXhwIjoxOTk1MTgyNzAzfQ.ooR4I6rIpWGKB0kGHIw_PuJfhgqyGnRQ4IDQeznGPpw"
 
 # db = bk.Table_Updates(SUPABASE_URL, KEYS, STOCK_API_KEYS)
 
@@ -30,7 +32,7 @@ start_time = time.time()
 # print(ob2.check_symbol_exist("AAPL"))
 
 data3 = bk.Table_View(SUPABASE_URL,KEYS)
-d3 = data3.view_customer_portfolio("Jeffd")
+d3 = data3.view_table_data("SP500_Index")
 print(d3)
 # data4 = bk.SP500(SUPABASE_URL, KEYS, STOCK_API_KEYS)
 # d4 = data4.realtime_sp500()
