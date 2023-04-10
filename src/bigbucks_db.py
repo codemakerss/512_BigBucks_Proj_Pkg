@@ -136,6 +136,10 @@ class Table_Updates(object):
 		stock_info = objs.get_stock_information(stock_symbol)
 		objs.update_stock_info(stock_info)
 
+		# update stock 5 year price data if not previously stored
+		objs2 = Table_View(self.url,self.keys)
+		objs2.update_five_year_data("Stock_Information")
+
 		return "Transaction_Records", transactions
 
 	def update_customer_balance(self, customer_id : int, stock_amount_spent : float, condition : str):
@@ -157,6 +161,7 @@ class Table_Updates(object):
 			response = requests.patch(url = api_url, params = parameters, json = data_to_insert)
 		except:
 			print("Fail to update customer balance")
+
 
 	def supabase_insert_function(self, table_name : str, data_to_insert : dict)->str:
 		"""
@@ -319,6 +324,55 @@ class Table_View(object):
 
 		return data
 
+	# more features
+	def store_stock_price_data2(self, stock_symbol : str):
+		base_url = 'https://www.alphavantage.co/query?'
+		params = {"function": "TIME_SERIES_DAILY_ADJUSTED", "symbol": stock_symbol, "outputsize" : "full","apikey": "9Q91BWGMOE13WOR3"}
+		
+		response = requests.get(base_url, params=params)
+		data = response.json() # dict
+		# store all data 
+		#all_data[stock_symbol] = data['Time Series (Daily)']
+
+		return data
+
+	# update 5 year stock data here
+	def update_five_year_data(self, table_name : str):
+		# objs = Table_View(self.url, self.keys)
+		stock_info = self.view_table_data(table_name)
+
+		all_symbols = []
+		for d in stock_info:
+			all_symbols.append(d['stock_symbol'])
+
+		# check if exists in the stock information table
+		for sym in all_symbols:
+			price_data = self.view_symbol_price_data(sym)
+
+			if (len(price_data) == 0):
+				# get date now
+				now = pendulum.now()
+				five_years_ago = now.subtract(years=5).date()
+				#print('2018-05-01' >= str(five_years_ago))
+
+				price1 = self.store_stock_price_data2("MSFT")
+				# call Table_Updates object
+				db = Table_Updates(self.url, self.keys, "9Q91BWGMOE13WOR3")
+				price = price1["Time Series (Daily)"]
+				ct = 0
+
+				for date, p in price.items():
+					if (str(date) >= str(five_years_ago)):
+						time.sleep(0.1)
+						data_to_insert = db.update_stock_daily_price(sym, date, p['1. open'], p['2. high'], p['3. low'], p['4. close'], p['5. adjusted close'], p['6. volume'])
+						db.supabase_insert_function(data_to_insert[0], data_to_insert[1])
+
+						ct = ct + 1
+						#print(ct)
+
+		return all_symbols
+
+
 	# get all symbol 5 years price data
 	def view_symbol_price_data(self, symbol_name : str):
 		api_url = self.url + "/rest/v1/" + "Stock_Price_Daily_Data" + "?stock_symbol=eq." + symbol_name
@@ -459,10 +513,6 @@ class SP500(object):
 		data = yf.download(tickers= "^GSPC", period='1d')
 
 		return float(data.iloc[-1]["Adj Close"])
-
-
-
-
 
 
 
