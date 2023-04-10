@@ -338,39 +338,43 @@ class Table_View(object):
 
 	# update 5 year stock data here
 	def update_five_year_data(self, table_name : str):
-		# objs = Table_View(self.url, self.keys)
-		stock_info = self.view_table_data(table_name)
+		try:
+			# objs = Table_View(self.url, self.keys)
+			stock_info = self.view_table_data(table_name)
 
-		all_symbols = []
-		for d in stock_info:
-			all_symbols.append(d['stock_symbol'])
+			all_symbols = []
+			for d in stock_info:
+				all_symbols.append(d['stock_symbol'])
 
-		# check if exists in the stock information table
-		for sym in all_symbols:
-			price_data = self.view_symbol_price_data(sym)
+			# check if exists in the stock information table
+			for sym in all_symbols:
+				price_data = self.view_symbol_price_data(sym)
 
-			if (len(price_data) == 0):
-				# get date now
-				now = pendulum.now()
-				five_years_ago = now.subtract(years=5).date()
-				#print('2018-05-01' >= str(five_years_ago))
+				if (len(price_data) == 0):
+					# get date now
+					now = pendulum.now()
+					five_years_ago = now.subtract(years=5).date()
+					#print('2018-05-01' >= str(five_years_ago))
 
-				price1 = self.store_stock_price_data2("MSFT")
-				# call Table_Updates object
-				db = Table_Updates(self.url, self.keys, "9Q91BWGMOE13WOR3")
-				price = price1["Time Series (Daily)"]
-				ct = 0
+					price1 = self.store_stock_price_data2("MSFT")
+					# call Table_Updates object
+					db = Table_Updates(self.url, self.keys, "9Q91BWGMOE13WOR3")
+					price = price1["Time Series (Daily)"]
+					ct = 0
 
-				for date, p in price.items():
-					if (str(date) >= str(five_years_ago)):
-						time.sleep(0.1)
-						data_to_insert = db.update_stock_daily_price(sym, date, p['1. open'], p['2. high'], p['3. low'], p['4. close'], p['5. adjusted close'], p['6. volume'])
-						db.supabase_insert_function(data_to_insert[0], data_to_insert[1])
+					for date, p in price.items():
+						if (str(date) >= str(five_years_ago)):
+							time.sleep(0.1)
+							data_to_insert = db.update_stock_daily_price(sym, date, p['1. open'], p['2. high'], p['3. low'], p['4. close'], p['5. adjusted close'], p['6. volume'])
+							db.supabase_insert_function(data_to_insert[0], data_to_insert[1])
 
-						ct = ct + 1
-						#print(ct)
+							ct = ct + 1
+							#print(ct)
 
-		return all_symbols
+			#return all_symbols
+			print("all symbols not in database were updated")
+		except:
+			print("check symbol in the stock information")
 
 
 	# get all symbol 5 years price data
