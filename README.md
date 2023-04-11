@@ -141,7 +141,7 @@ print(tmp)
 
 - Update Transaction_Records
 
-  Note : by running this function, both Stock_Information table and Customer_Information's account balance will be also synchronized
+  Note : by running this function, both Stock_Information table and Customer_Information's account balance will be also synchronized, now can also update the Stock_Price_Daily_Data at the same time
 
 ```python
 # Example Code
