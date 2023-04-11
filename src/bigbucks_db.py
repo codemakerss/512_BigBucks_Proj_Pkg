@@ -132,13 +132,17 @@ class Table_Updates(object):
 		self.update_customer_balance(customer_id, stock_amount_spent, condition)
 
 		# update stock symbol information
-		objs = Stock_Data(self.url, self.keys, self.stock_keys)
-		stock_info = objs.get_stock_information(stock_symbol)
-		objs.update_stock_info(stock_info)
+		# check only if the condition is buy
+		if (condition == "buy"):
+			objs = Stock_Data(self.url, self.keys, self.stock_keys)
+			stock_info = objs.get_stock_information(stock_symbol)
+			objs.update_stock_info(stock_info)
 
 		# update stock 5 year price data if not previously stored
-		objs2 = Table_View(self.url,self.keys)
-		objs2.update_five_year_data("Stock_Information")
+		# check only if the condtion is buy
+		if (condition == "buy"):
+			objs2 = Table_View(self.url,self.keys)
+			objs2.update_five_year_data("Stock_Information")
 
 		return "Transaction_Records", transactions
 
